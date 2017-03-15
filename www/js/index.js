@@ -134,11 +134,11 @@ function loadVehicles(searchValue){
 
 
 }
-   window.addEventListener('native.keyboardshow', keyboardShowHandler);
+   //window.addEventListener('native.keyboardshow', keyboardShowHandler);
 
-    function keyboardShowHandler(e){
-        alert('Keyboard height is: ' + e.keyboardHeight);
-    }
+   // function keyboardShowHandler(e){
+   //     alert('Keyboard height is: ' + e.keyboardHeight);
+   // }
 var app = {
     // Application Constructor
 
