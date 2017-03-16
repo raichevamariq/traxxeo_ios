@@ -58,8 +58,6 @@ function loadMap(){
             var latitude =  parseFloat(storage.getItem("latitude"));
             var longitude = parseFloat(storage.getItem("longitude"));
             var marker_icon = cat_path+storage.category_img+".png";
-
-            alert(latitude + " " +longitude );
             var myLatLng = {lat:latitude, lng:longitude};
 
              var map = new google.maps.Map(document.getElementById('map'), {
