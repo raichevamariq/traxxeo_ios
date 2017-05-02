@@ -36,6 +36,7 @@
 </body>
 <script type="text/javascript" src="js/jAlert.js"></script>
 <script>
+
     var section = storage.selectedSection;
     $("#btn-"+section).addClass("section");
 
@@ -51,9 +52,24 @@
                                                'hideAnimation': 'fadeOutDown'
                                              });
                                             }
-                                            else {
-                                                storage.setItem("selectedSection","details");
-                                                window.location = "detail_view.html";
+                                           else {
+                                                if(storage.getItem("type")== "person"){
+                                                    storage.setItem("selectedSection","details");
+                                                    window.location = "details_person.html";
+                                                    }
+
+
+                                                 if(storage.getItem("type")== "vehicle"){
+
+                                                    storage.setItem("selectedSection","details");
+                                                    window.location = "detail_view.html";
+                                                    }
+
+                                                     if(storage.getItem("type")== "object"){
+
+                                                    storage.setItem("selectedSection","details");
+                                                    window.location = "details_object.html";
+                                                    }
                                             }
                         				});
 
@@ -71,23 +87,9 @@
 
 
                         				$("#btn-map").on("click",function(){
-
-                                            if( storage.getItem("event_id")=="")
-                                            {
-                                             $.jAlert({
-                                               'title': 'No item selected',
-                                               'content': 'Pleas select an item from the list',
-                                               'theme': 'blue',
-                                               'size': 'md',
-                                               'showAnimation': 'fadeInUp',
-                                               'hideAnimation': 'fadeOutDown'
-                                             });
-                                            }
-                                            else{
-
-                        				                       storage.setItem("selectedSection","map");
+                        		                       storage.setItem("selectedSection","map");
                                                                 window.location = "map_view.html";
-                                                 }
+
                                                       });
 
 

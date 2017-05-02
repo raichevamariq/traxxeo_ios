@@ -34,7 +34,7 @@
 <div style="margin-left:5px;margin-bottom:5px;margin-right:5px;"   id="location_info">
 
 </div>
-<div  id="map" style="position:fixed;height:59%;overflow:auto;margin-left:5px;margin-right:5px;margin-bottom:5px" ></div>
+<div  id="map" style="position:fixed;height:80%;overflow:auto;margin-left:5px;margin-right:5px;margin-bottom:5px" ></div>
 
 <div id="btn-bar"  style="position:fixed;bottom:0;height:12%;width:100%;background-color:#000000"></div>
 
@@ -47,32 +47,75 @@ img.src = "img/events/symbol_default.png";
 
 }
 function loadMap(){
-    var cat_path ="img/veh_categories/";
+    var cat_path ="img/veh_categories_map/";
+    var cat_path_single_veh ="img/veh_categories/";
+    var cat_path_single_person ="img/person_categories/";
     var event_path="img/events/";
             $("#top_page").load("template.html");
             $("#btn-bar").load("button_bar.html");
-            $("#location_info").append('<div  class="card"  >'+
-                                      '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path+storage.category_img+'.png" /></div><div class="col-xs-9">'+
-                                        '<div class="vehicle"><div class="vehicle_name">'+storage.name+'</div><div class="vehicle_spec">'+storage.spec+'</div><div class="vehicle_address">'+storage.address+'</div></div></div></div>'+
+            if(storage.getItem("multiple_vehicles")==0){
+            if(storage.getItem("type")== "person"){
+             $("#location_info").append('<div  class="card"  >'+
+                                      '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path_single_person+storage.category_img+'.png" /></div><div class="col-xs-9">'+
+                                        '<div class="vehicle"><div class="vehicle_name">'+storage.first_name+' '+storage.last_name+'</div><div class="vehicle_spec">'+storage.person_spec+'</div><div class="vehicle_address">'+storage.address+'</div></div></div></div>'+
                                            '<div class="vehicle_event" style="margin-top:10px;margin-left:10px"><img style="margin-right:10px" width="15" onerror="hide_img(this)" height="15" src = "'+event_path+storage.event_img+'.png" />'+storage.event_date+ " " + storage.poi+' </div></div>');
+            }     else{
+                $("#location_info").append('<div  class="card"  >'+
+                                      '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path_single_veh+storage.category_img+'.png" /></div><div class="col-xs-9">'+
+                                        '<div class="vehicle"><div class="vehicle_name">'+storage.name+'</div><div class="vehicle_spec">'+storage.spec+'</div><div class="vehicle_address">'+storage.address+'</div></div></div></div>'+
+
+                                        '<div class="vehicle_event" style="margin-top:10px;margin-left:10px"><img style="margin-right:10px" width="15" onerror="hide_img(this)" height="15" src = "'+event_path+storage.event_img+'.png" />'+storage.event_date+ " " + storage.poi+' </div></div>');
+          }
+           $("#map").css("height", "59%");
+           }
+
             var latitude =  parseFloat(storage.getItem("latitude"));
             var longitude = parseFloat(storage.getItem("longitude"));
-            var marker_icon = cat_path+storage.category_img+".png";
+
             var myLatLng = {lat:latitude, lng:longitude};
+
 
              var map = new google.maps.Map(document.getElementById('map'), {
                  zoom: 10,
                 center: myLatLng
              });
 
+             if(storage.getItem("multiple_vehicles")==0){
+              if(storage.getItem("type") == "person") {
+             cat_path = "img/person_category_map/";
+             }
+                        var marker = new google.maps.Marker({
+                            position: myLatLng,
+                            map: map,
+                            icon: cat_path+storage.category_img+".png",
 
-            var marker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-                title: storage.getItem("address")
-            });
+
+
+                            title: storage.getItem("address")
+                        });
+            }
+             if(storage.getItem("multiple_vehicles")==1){
+             var vehicles = JSON.parse(localStorage.getItem("current_vehicles"));
+
+             for (var i =0 ;i<vehicles.length;i++) {
+                   var LatLng = {
+                    lat:parseFloat(vehicles[i].latitude),
+                    lng:parseFloat(vehicles[i].longitude)
+                   };
+                   console.log(vehicles[i].name);
+                  var marker = new google.maps.Marker({
+                            position: LatLng,
+                            map: map,
+                            icon:  cat_path+vehicles[i].category_img+".png",
+                            title: vehicles[i].name
+                        });
+             }
+
+
+
+
          }
-
+}
 
 
 </script>

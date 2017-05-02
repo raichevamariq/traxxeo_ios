@@ -25,13 +25,93 @@ img.src = "img/events/symbol_default.png";
 
 }
 
+///////////////
+function loadObjectInfo(){
 
-function loadVehicleInfo(){
 var event_id  = storage.getItem("event_id");
 console.log("event_id is"+event_id);
  var cat_path ="img/veh_categories/"
  var default_event ="symbol_default.png";
  var event_path="img/events/"
+
+    $.ajax({
+	                        method:"get",
+                             url:"http://devmobile.traxxeo.com/servlet/showDetails?event_id="+event_id+"&userId="+storage.getItem("userId"),
+                                    error:function(  jqXHR, textStatus,  errorThrown ){
+
+                                    console.log(errorThrown);
+                                    },
+                        		}).done(function(response){
+
+                        				 console.log("proba"+response);
+                        				 var jsonData = JSON.parse(response);
+                        				 $("#vehicle_info").append('<div class="row"><div class="col-xs-5 vehicle_info">Company name:</div><div class="col-xs-4 vehicle_spec">'+jsonData.company_name+'</div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">Container name:</div><div class="col-xs-4 vehicle_spec"></div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">Is_container:</div><div class="col-xs-4 vehicle_spec">'+jsonData.is_container+'</div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">Object type:</div><div class="col-xs-4 vehicle_spec">'+jsonData.numberplate+'</div></div>'+
+                        				 '<div class="row vehicle_info" style="margin-top:20px;margin-left:20px" >Comment:</div><div class="row vehicle_spec" style="margin-left:20px">'+jsonData.comment+'</div>');
+                        				 //' <table class="table" style="margin:10px"><tr class="default font"><td>Color:</td><td>'+jsonData.color+'</td></tr><tr class="default font"><td>Chassis number:</td><td></td></tr>'+
+
+                        				// '<tr class="default font"><td>Last badger:</td><td>'+jsonData.last_badger+'</td></tr></table><div style="margin:20px" class="default font">Comment:</div><div> '+jsonData.comment+'</div>');
+                        				//appending the vehicle's card
+                        				$("#vehicle_block").append( '<div  class=" card"  >'+
+                                   '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path+storage.category_img+'.png" /></div><div class="col-xs-9">'+
+                                       '<div class="vehicle"><div class="vehicle_name">'+jsonData.category_name+' '+jsonData.company_number+' '+jsonData.numberplate+'</div><div class="vehicle_spec"></div><div class="vehicle_address">'+jsonData.address+'</div></div></div></div>'+
+                                           '<div class="vehicle_event" style="margin-top:10px;margin-left:10px;"><img class="'+storage.event_img+'" style="margin-right:10px" onerror="hide_img(this)" src = "'+event_path+storage.event_img+'.png" />'+jsonData.date+ " " + jsonData.poi+' </div></div><div style="width:100%;height:150px;align-content:center;padding:10px"></div>');
+
+                        			}) .fail(function( jqXHR, textStatus ) {
+
+                                         });
+
+}
+////////////////////////
+function loadPersonInfo(){
+
+var event_id  = storage.getItem("event_id");
+console.log("event_id is"+event_id);
+ var cat_path ="img/person_categories/"
+ var default_event ="symbol_default.png";
+ var event_path="img/events/"
+
+    $.ajax({
+	                        method:"get",
+                             url:"http://devmobile.traxxeo.com/servlet/showPersonDetails?event_id="+event_id+"&userId="+storage.getItem("userId"),
+                                    error:function(  jqXHR, textStatus,  errorThrown ){
+
+                                    console.log(errorThrown);
+                                    },
+                        		}).done(function(response){
+
+                        				 console.log("proba"+response);
+                        				 var jsonData = JSON.parse(response);
+                        				 $("#vehicle_info").append('<div class="row"><div class="col-xs-5 vehicle_info">Company name:</div><div class="col-xs-4 vehicle_spec">'+jsonData.company_name+'</div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">NISS/LIMOSA:</div><div class="col-xs-4 vehicle_spec">'+jsonData.niss+'/'+jsonData.limosa+'</div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">Phone:</div><div class="col-xs-4 vehicle_spec">'+jsonData.phone+'</div></div>'+
+                        				 '<div class="row"><div class="col-xs-5 vehicle_info">Home address::</div><div class="col-xs-4 vehicle_spec">'+jsonData.home_address+'</div></div>'+
+                        				 '<div class="row vehicle_info" style="margin-top:20px;margin-left:20px" >Comment:</div><div class="row vehicle_spec" style="margin-left:20px">'+jsonData.comment+'</div>');
+                        				 //' <table class="table" style="margin:10px"><tr class="default font"><td>Color:</td><td>'+jsonData.color+'</td></tr><tr class="default font"><td>Chassis number:</td><td></td></tr>'+
+
+                        				// '<tr class="default font"><td>Last badger:</td><td>'+jsonData.last_badger+'</td></tr></table><div style="margin:20px" class="default font">Comment:</div><div> '+jsonData.comment+'</div>');
+                        				//appending the vehicle's card
+                        				$("#vehicle_block").append( '<div  class=" card"  >'+
+                                   '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path+storage.category_img+'.png" /></div><div class="col-xs-9">'+
+                                       '<div class="vehicle"><div class="vehicle_name">'+jsonData.first_name+' '+jsonData.last_name+'</div><div class="vehicle_spec">'+jsonData.company_name+' '+jsonData.category_name+'</div><div class="vehicle_address">'+jsonData.address+'</div></div></div></div>'+
+                                           '<div class="vehicle_event" style="margin-top:10px;margin-left:10px;"><img class="'+storage.event_img+'" style="margin-right:10px" onerror="hide_img(this)" src = "'+event_path+storage.event_img+'.png" />'+jsonData.date+ ' </div></div><div style="width:100%;height:150px;align-content:center;padding:10px"></div>');
+
+                        			}) .fail(function( jqXHR, textStatus ) {
+
+                                         });
+
+}////////////////
+
+function loadVehicleInfo(){
+
+var event_id  = storage.getItem("event_id");
+console.log("event_id is"+event_id);
+ var cat_path ="img/veh_categories/"
+ var default_event ="symbol_default.png";
+ var event_path="img/events/"
+
     $.ajax({
 	                        method:"get",
                              url:"http://devmobile.traxxeo.com/servlet/showDetails?event_id="+event_id+"&userId="+storage.getItem("userId"),
@@ -55,7 +135,7 @@ console.log("event_id is"+event_id);
                         				$("#vehicle_block").append( '<div  class=" card"  >'+
                                    '<div class="row"><div class="col-xs-3"><img width="50" height = "50" src="'+cat_path+storage.category_img+'.png" /></div><div class="col-xs-9">'+
                                        '<div class="vehicle"><div class="vehicle_name">'+jsonData.category_name+' '+jsonData.company_number+' '+jsonData.numberplate+'</div><div class="vehicle_spec">'+jsonData.brand+' '+jsonData.model+'</div><div class="vehicle_address">'+jsonData.address+'</div></div></div></div>'+
-                                           '<div class="vehicle_event" style="margin-top:10px;margin-left:10px;"><img class="'+storage.event_img+'" style="margin-right:10px" onerror="hide_img(this)" src = "'+event_path+storage.event_img+'.png" />'+jsonData.date+ " " + jsonData.poi+' </div></div><div style="width:100%;align-content:center;padding:10px"><img width="250" height="150" src="img/peugeot.png" /></div>');
+                                           '<div class="vehicle_event" style="margin-top:10px;margin-left:10px;"><img class="'+storage.event_img+'" style="margin-right:10px" onerror="hide_img(this)" src = "'+event_path+storage.event_img+'.png" />'+jsonData.date+ " " + jsonData.poi+' </div></div><div style="width:100%;height:150px;align-content:center;padding:10px"></div>');
 
                         			}) .fail(function( jqXHR, textStatus ) {
 
@@ -63,17 +143,22 @@ console.log("event_id is"+event_id);
 
 }
 function loadVehicles(searchValue){
-    console.log("FUNCTION LOADED");
      storage.setItem("event_id","");
+     var all_items= new Array();
     var cat_path ="img/veh_categories/"
-    var event_path="img/events/"
+    var cat_person_path = "img/person_categories/"
+    var event_path="img/events/";
     var vehicles;
-  /*  var person = storage.getItem(userId).person;
-    var object = storage.getItem(userId).object;
-     var vehicle = storage.getItem(userId).vehicle; */
-    var url = "http://devmobile.traxxeo.com/servlet/searchVehicle?userId="+storage.getItem("userId")+"&searchValue="+searchValue.toUpperCase();
+    storage.removeItem("current_vehicles");
+     var filter =JSON.parse(storage.getItem(storage.getItem("userId")));
+   // alert(filter.person);
+    var person = filter.person;
+    var object = filter.object;
+     var vehicle = filter.vehicle;
+    var url = "http://devmobile.traxxeo.com/servlet/searchVehicle?userId="+storage.getItem("userId")+"&searchValue="+searchValue.toUpperCase()+"&person="+person+"&vehicle="+vehicle+"&object="+object;
     console.log("URL:"+url);
     $("#vehicle_list").html("");
+
 
         $.ajax({
 	                        method:"get",
@@ -85,41 +170,77 @@ function loadVehicles(searchValue){
                         		}).done(function(response){
                                         vehicles = response;
                                         console.log("VEHICLES"+vehicles);
+                                        storage.setItem("multiple_vehicles",1);
                         				 var jsonData = JSON.parse(response);
                         				 $("#vehicles").append('<div class="list-group" id="vehicle_list" ></div>');
+                        				 console.log("JSONDATA length"+jsonData.length);
                         				 for(var i=0;i<jsonData.length;i++){
                         				// storage.event_img= jsonData[i].event_img;
+                        				if(jsonData[i].type == "person"){
+
+                                            	$("#vehicle_list").append(' <div  class=" card"  >'+
+                                                                    				'<div class="col-xs-3" ><img style="float:right" width="50" height = "50" src="'+cat_person_path+jsonData[i].category_img+'.png" /></div><div class="col-xs-9">'+
+                                                                    				'<div class="vehicle" id="'+jsonData[i].id+'" data-first-name="'+jsonData[i].first_name+'" data-last-name="'+jsonData[i].last_name+'" data-item="'+jsonData[i].type+'" data-event-id="'+jsonData[i].event_id+'" data-date="'+jsonData[i].date+' " data-latitude="'+jsonData[i].latitude+
+                                                                                                            				'" data-name = "'+ jsonData[i].company_name+' '+jsonData[i].category_name+
+                                                                                                            				'" data-longitude = "'+jsonData[i].longitude+'" data-address="'+jsonData[i].address+'" data-category-img="'+jsonData[i].category_img+'" data-event-img="'+jsonData[i].event_img+
+                                                                                                            				'"><div class="vehicle_name">'+jsonData[i].first_name+ " " +jsonData[i].last_name+ '</div><div class="vehicle_spec">'+jsonData[i].company_name+' '+jsonData[i].category_name+'</div><div class="vehicle_address">'+jsonData[i].address+'</div></div></div>'+
+                                                                    				'<div style="margin-top:10px;margin-left:10px" class="vehicle_event"><img class="'+jsonData[i].event_img+'" style="margin-right:10px" onerror="hide_img(this)"  width="15" height="15" src = "'+event_path+jsonData[i].event_img+'.png" />'+jsonData[i].date+' </div></div>');
+
+                        				}
+                        				else{
+
+
+                        				all_items.push({
+                        				category_img: jsonData[i].category_img,
+                        				name: jsonData[i].name,
+                        				latitude:jsonData[i].latitude,
+                        				longitude:jsonData[i].longitude
+                        				});
                         				$("#vehicle_list").append(' <div  class=" card"  >'+
                         				'<div class="col-xs-3" ><img style="float:right" width="50" height = "50" src="'+cat_path+jsonData[i].category_img+'.png" /></div><div class="col-xs-9">'+
-                        				'<div class="vehicle" id="'+jsonData[i].id+'" data-event-id="'+jsonData[i].event_id+'" data-date="'+jsonData[i].date+' " data-latitude="'+jsonData[i].latitude+
+                        				'<div class="vehicle" id="'+jsonData[i].id+'" data-item="'+jsonData[i].type+'" data-event-id="'+jsonData[i].event_id+'" data-date="'+jsonData[i].date+' " data-latitude="'+jsonData[i].latitude+
                         				'" data-name = "'+ jsonData[i].name+'" data-poi="'+jsonData[i].poi_name+'" data-spec="'+jsonData[i].brand+' '+jsonData[i].model+
                         				'" data-longitude = "'+jsonData[i].longitude+'" data-address="'+jsonData[i].address+'" data-category-img="'+jsonData[i].category_img+'" data-event-img="'+jsonData[i].event_img+
                         				'"><div class="vehicle_name">'+jsonData[i].name+'</div><div class="vehicle_spec">'+jsonData[i].brand+' '+jsonData[i].model+'</div><div class="vehicle_address">'+jsonData[i].address+'</div></div></div>'+
                         				'<div style="margin-top:10px;margin-left:10px" class="vehicle_event"><img class="'+jsonData[i].event_img+'" style="margin-right:10px" onerror="hide_img(this)"  width="15" height="15" src = "'+event_path+jsonData[i].event_img+'.png" />'+jsonData[i].date+ " " + jsonData[i].poi_name+' </div></div>');
                                        }
+                                       }
 
-
+                                        storage.setItem("current_vehicles",JSON.stringify(all_items));
                                        //	$("#vehicle_list").append(' <div id="'+jsonData[i].id+'" class="list-group-item" style="witdh:70%" ><div style="background-color:#b6caea"> <icon class="glyphicon glyphicon-align-justify\"></icon><span class="list-title">'+jsonData[i].name+'</span></div><div>'+jsonData[i].address+'</div><div style="display:none" class="'+jsonData[i].id+' buttons" style="margin-top:20px"><button  class="btn-success" data-event-id="'+jsonData[i].event_id+'">View details</button><button class="btn-danger" '+
                                                                				 // 'data-date="'+jsonData[i].date+' " data-latitude="'+jsonData[i].latitude+'" data-longitude = "'+jsonData[i].longitude+'" data-address="'+jsonData[i].address+'">View on map</button></div></div>');
                                                                             //  }
                                         $(".vehicle").on("click",function(){
-                                            //each(function(){
-                                               // $(this).click(function(){
-                                               $(".selected").removeClass("selected");
+                                             $(".selected").removeClass("selected");
                                                $("#btn-map").show();
                                                $("#btn-details").show();
                                                $(this).parent().parent().addClass("selected");
+                                                storage.setItem("multiple_vehicles",0);
+                                                //PERSON ONLY CHARACTHERISTICS
+                                                if($(this).attr("data-item")=="person"){
+
+                                                storage.setItem("first_name", $(this).attr("data-first-name"));
+                                                storage.setItem("last_name", $(this).attr("data-last-name"));
+                                                 storage.setItem("person_spec",$(this).attr("data-name"));
+                                                }
+                                                 //VEHICLE ONLY CHARACTHERISTICS
+                                                else {
+                                                 storage.setItem("spec",$(this).attr("data-spec"));
+                                                 storage.setItem("name",$(this).attr("data-name"));
+                                                 storage.setItem("poi",$(this).attr("data-poi"));
+
+                                                }
                                                storage.setItem("event_date",  $(this).attr("data-date"));
+                                                storage.setItem("type",  $(this).attr("data-item"));
                                                storage.setItem("latitude",  $(this).attr("data-latitude"));
                                                storage.setItem("longitude",  $(this).attr("data-longitude"));
                                                storage.setItem("address",  $(this).attr("data-address"));
                                                storage.setItem("event_id",  $(this).attr("data-event-id"));
                                                storage.setItem("category_img",$(this).attr("data-category-img"));
                                                storage.setItem("event_img",$(this).attr("data-event-img"));
-                                                storage.setItem("spec",$(this).attr("data-spec"));
-                                                 storage.setItem("name",$(this).attr("data-name"));
-                                                  storage.setItem("poi",$(this).attr("data-poi"));
+
                                                 var id =   $(this).attr('id');
+
                                                 $("."+id).show();
                                             // });
                                         });
@@ -170,7 +291,7 @@ var app = {
                 				method:"get",
                             	url:"http://devmobile.traxxeo.com/servlet/loginServlet?username="+$("#username").val().trim()+"&password="+$("#password").val()
                     		}).done(function(response){
-                    		alert(response);
+
                     		    if(response == "Incorrect"){
                                             $.jAlert({
                                                'title': 'Invalid credentials',
@@ -192,6 +313,7 @@ var app = {
                                                        "vehicle":1,
                                                        "object":1};
                                     storage.setItem(response,JSON.stringify(filter));
+
                 				    }
                 				    window.location.href="splash_screen.html";
                 				    }
